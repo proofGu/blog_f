@@ -49,6 +49,20 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/posts')
+def posts():
+    articles = Article.query.order_by(Article.date.desc()).all()
+    # метод query обращаеться к бд класса и вытаскивает данные
+    return render_template('posts.html', articles=articles)
+    # articles=articles передаем в шаблон сприсок и сможем с ним работать
+
+
+@app.route('/posts/<int:id>')  # получаем динамические парраметры из url
+def post_detail(id):
+    article = Article.query.get(id)
+    return render_template('post_detail.html', article=article)
+
+
 @app.route('/create-article', methods=['POST', 'GET'])
 # указываем методы которые обрабатывает функция
 # GET переход на страницу
@@ -64,9 +78,10 @@ def create_article():
         article = Article(title=title, intro=intro, text=text)
 
         try:
-            db.session.add(article) #  добавляем объект article в бд
-            db.session.commit() #  сохраняем объект
-            return redirect('/') #  с помощью функции redirect после добавления статьи перенаправляемся на главную страницу
+            db.session.add(article)  # добавляем объект article в бд
+            db.session.commit()  # сохраняем объект
+            return redirect('/posts')
+            # с помощью функции redirect после добавления статьи перенаправляемся на страницу со статьями
         except:
             return "При добавлении статьи произошла ошибка"
     else:
