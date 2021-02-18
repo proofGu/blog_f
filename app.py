@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect  # url_for
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -81,8 +81,7 @@ def post_delete(id):
 
 @app.route('/create-article', methods=['POST', 'GET'])
 # указываем методы которые обрабатывает функция
-# GET переход на страницу
-# POST отправление статей
+# GET переход на страницу POST отправление статей
 def create_article():
     if request.method == 'POST':
         # получаем данные
