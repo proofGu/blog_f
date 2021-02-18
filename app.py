@@ -63,6 +63,20 @@ def post_detail(id):
     return render_template('post_detail.html', article=article)
 
 
+@app.route('/posts/<int:id>/delete')
+def post_delete(id):
+    article = Article.query.get_or_404(id)
+    # если не будет найдена запись в бд то будет вызвана ошибка 404
+    # при работе с бд нужно истользовать try/except блок
+    try:
+        db.session.delete(article)
+        db.session.commit()
+        return redirect('/posts')
+        return redirect('/posts')
+    except:
+        return 'При удалении статьи произошла ошибка'
+
+
 @app.route('/create-article', methods=['POST', 'GET'])
 # указываем методы которые обрабатывает функция
 # GET переход на страницу
@@ -86,6 +100,23 @@ def create_article():
             return "При добавлении статьи произошла ошибка"
     else:
         return render_template('create-article.html')
+
+
+@app.route('/posts/<int:id>/update', methods=['POST', 'GET'])
+def post_update(id):
+    article = Article.query.get(id)  # найти статью
+    if request.method == 'POST':
+        article.title = request.form['title']
+        article.intro = request.form['intro']
+        article.text = request.form['text']
+
+        try:
+            db.session.commit()
+            return redirect('/posts')
+        except:
+            return "При редактировании статьи произошла ошибка"
+    else:
+        return render_template('post_update.html', article=article)  # передать в статью в сам щаблон
 
 
 if __name__ == '__main__':  # если запускаем через этот файл(app.py) = то запускаем проект как flask приложение
