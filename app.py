@@ -1,6 +1,7 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, request, redirect  # url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+
 # из библиотеки flask_sqlalchemy импортирует класс SQLAlchemy
 # render_template функция для работы с HTML
 # url_for фкнкция шаблонизатора
@@ -11,6 +12,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Отключаем SQLALCHEMY_TRACK_MODIFICATIONS что бы не всплывала ошибка о том что это скоро перестанут поддерживать
 db = SQLAlchemy(app)
+
+
 # создаем объект на основе класса SQLAlchemy передаем в него обэект класса flask - app
 # в котором настроено подключение к бд
 
@@ -71,7 +74,6 @@ def post_delete(id):
     try:
         db.session.delete(article)
         db.session.commit()
-        return redirect('/posts')
         return redirect('/posts')
     except:
         return 'При удалении статьи произошла ошибка'
